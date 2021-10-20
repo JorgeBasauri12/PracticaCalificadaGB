@@ -1,0 +1,42 @@
+const {Schema, model, SchemaTypes} = require('mongoose');
+
+//Definicion del esquema para la coleccion de Proyectos
+
+const ProductoSchema = Schema({
+    productonombre:{
+        type: String,
+        required: true,
+        unique:true
+    },
+    preciounitario:{
+        type: String,
+        require:true
+    },
+    proveedor:{
+        require: true,
+        type: Schema.Types.ObjectId,
+        ref: 'Proveedor'
+    },
+    categoria:{
+        require: true,
+        type: Schema.Types.ObjectId,
+        ref: 'Categoria'
+    },
+    img:{
+        type: String
+    },
+        
+},{ collection: 'productos'});
+//se utiliza collection para indicar el nombre como queremos que se cree 
+//la coleccion en la base de datos
+
+//Este cambio es solo para fines visuales, la bd permanece con _id
+ProductoSchema.method('toJSON', function(){
+    const {__v, ...object } = this.toObject();
+    return object;
+})
+
+//Se ha creado el schema, ahora necesitamos implementar el modelo
+//Se exporta el modelo
+//Por defecto moongose creara en mongodb un documento en plural: usuarios
+module.exports = model ('Producto', ProductoSchema);
